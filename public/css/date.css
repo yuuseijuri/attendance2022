@@ -1,0 +1,64 @@
+li {
+  list-style: none;
+}
+
+.container {
+  width: 100%;
+}
+
+.title {
+  font-size: 45px;
+  letter-spacing: 7px;
+  padding: 5px;
+  text-align: center;
+  margin: 10px 0;
+}
+
+.list {
+  display: flex;
+  justify-content: center;
+  letter-spacing: 20px;
+  margin-bottom: 10px;
+}
+
+.list_home,
+.list_logout {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-style: double;
+}
+
+.list_home {
+  margin-right: 50px;
+}
+
+.main {
+  width: 100%;
+  height: 70vh;
+  background-color: #DCDCDC;
+  padding-top: 30px;
+}
+.date {
+  font-size: 30px;
+  text-align: center;
+  margin: 10px 0;
+}
+hr {
+  border-color: black;
+}
+.date_text {
+  width: 80%;
+  text-align: center;
+  margin: 0 auto;
+  font-size: 20px;
+  letter-spacing: 2px;
+  background-color: aqua;
+}
+.logo {
+  text-align: center;
+  margin: 25px 0;
+}
+svg.w-5.h-5 {
+  width: 200px;
+  height: 50px;
+}

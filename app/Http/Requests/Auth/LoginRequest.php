@@ -29,24 +29,11 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => ['required', 'string' ],
-            'email' => ['required', 'string', 'email','unique:email'],
-            'password' => ['required', 'string', 'confirmed']
+            'email' => ['required', 'string', 'email'],
+            'password' => ['required', 'string'],
         ];
     }
-    public function messages() {
-        return [
-        'name.required' => '名前を入力してください。',
-        'name.string' => '文字列で入力してください。',
-        'email.required' => 'メールアドレスを入力してください。',
-        'email.string' => '文字列で入力してください。',
-        'email.email' => 'メールアドレスの形式で入力してください。',
-        'email.unique' => 'そのメールアドレスは既に存在します。',
-        'password.required' => 'パスワードを入力してください。',
-        'password.string' => '文字列で入力してください。',
-        'password.confirmed' => '確認用パスワードを入力してください。'
-        ];
-    }
+
     /**
      * Attempt to authenticate the request's credentials.
      *
