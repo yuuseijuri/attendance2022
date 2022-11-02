@@ -4,8 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
-use App\Http\Requests\AttendanceRequest;
-use App\Http\Requests\RestRequest;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\Rest;
@@ -24,22 +22,34 @@ class AttendanceController extends Controller
 
         $pages = Attendance::Paginate(10);
 
-        $times = Carbon::now()->format('y-m-d');
-        
+        $days = Carbon::now()->format('y-m-d');
 
-        return view('date', ['pages' => $pages, 'users' => $users, 'times' => $times]);
+        $starts = Attendance::create([
+            'user_id' => $users->id,
+            'start_time' => Carbon::now()
+        ]);
+
+        $times = Attendance::where('user_id', $users->id)->latest()->first();
+        $ends = $times->update([
+            'end_time' => Carbon::now()
+        ]);
+        
+        return view('date', ['pages' => $pages, 'users' => $users, 'days' => $days, 'starts' => $starts, 'ends' => $ends]);
     }
 
-    public function jobIn(AttendanceRequest $request) {
+    public function jobIn(Request $request) {
 
         $users = Auth::user();
         
         $times = Attendance::where('user_id', $users->id)->latest()->first();
-        
+
+        $timesDay = null;
+
         if($times) {
             $timesJobIn = new Carbon($times->start_time);
             $timesDay = $timesJobIn->startOfDay();
         }
+
         $newTimesDay = Carbon::today();
 
         if(($timesDay == $newTimesDay) && (empty($times->end_time))) {
@@ -47,21 +57,23 @@ class AttendanceController extends Controller
         }
 
         $timestamp = Attendance::create([
-            'user_id' => $user->id,
+            'user_id' => $users->id,
             'start_time' => Carbon::now()
         ]);
-        dd($timestamp);
+
         return redirect()->back()->with('出勤打刻が完了しました。');
     }
 
-    public function jobOut(AttendanceRequest $request) {
+    public function jobOut(Request $request) {
 
         $users = Auth::user();
 
         $times = Attendance::where('user_id', $users->id)->latest()->first();
+
         if(!empty($times->end_time)) {
             return redirect()->back()->with('既に退勤の打刻がされているか、出勤打刻されていません');
         }
+
         $times->update([
             'end_time' => Carbon::now()
         ]);
@@ -69,30 +81,47 @@ class AttendanceController extends Controller
         return redirect()->back()->with('退勤打刻が完了しました。');
     }
     
-    public function restIn(RestRequest $request) {
+    public function restIn(Request $request) {
 
         $users = Auth::user();
 
-        $form = $request->only([
-            'attendance_id',
-            'start_time'
+        $times = Rest::where('attendance_id', $users->id)->latest()->first();
+
+        $timesTime = null;
+
+        if($times) {
+            $timesRestIn = new Carbon($times->start_time);
+        }
+        $newTimesTime = Carbon::today();
+
+        if(($timesTime == $newTimesTime) && (empty($times->end_time))) {
+            return redirect()->back()->with('既に休憩開始打刻がされています。');
+        }
+
+        $timestamp = Rest::create([
+            'attendance_id' => $users->id,
+            'start_time' => Carbon::now()
         ]);
-        Rest::create($form);
-        dd($form);
-        return redirect();
+        return redirect()->back()->with('休憩開始打刻が完了しました。');
+
     }
 
-    public function restOut(RestRequest $request) {
+    public function restOut(Request $request) {
 
         $users = Auth::user();
 
-        $form = $request->only([
-            'attendance_id',
-            'end_time'
+        $times = Rest::where('attendance_id', $users->id)->latest()->first();
+
+        if(!empty($times->end_time)) {
+            return redirect()->back()->with('既に休憩終了の打刻がされているか、休憩開始打刻されていません');
+        }
+
+        $times->update([
+            'end_time' => Carbon::now()
         ]);
-        Rest::create($form);
         
-        return redirect();
+        return redirect()->back()->with('退勤打刻が完了しました。');
+
     }
     
 }

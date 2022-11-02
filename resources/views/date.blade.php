@@ -17,7 +17,7 @@
     </ul>
     @endif
     <!-- <p><input type="date" class="date"></p> -->
-    <p class="date">{{ $times }}</p>
+    <p class="date">{{ $days }}</p>
     <hr>
     <table class="date_text">
       <tr>
@@ -27,14 +27,18 @@
         <th class="date_job__time">勤務時間</th>
         <th class="date_job__rest">休憩時間</th>
       </tr>
-      <form action="{{ route('date') }}">
+      <form action="{{ route('date') }}" method="post">
+        
         <tr>
           <td>{{ $users->name }}</td>
+          <td>{{ $starts->start_time }}</td>
+          <td>{{ $ends->end_time }}</td>
           
         </tr>
-      </table>
-      {{ $pages->links() }}
-    </form>
+        
+      </form>
+    </table>
+    <p class="link">{{ $pages->links() }}</p>
     
   </div>
   <div class="footer">
