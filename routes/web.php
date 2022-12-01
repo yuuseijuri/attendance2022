@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Models\User;
 use App\Models\Attendance;
 use App\Models\Rest;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -36,7 +37,7 @@ Route::group(['middleware' => 'auth'], function() {
 
     Route::post('/date', [AttendanceController::class, 'store'])->name('date');
 
-    Route::get('/date', [AttendanceController::class, 'show'])->name('date');
+    Route::get('/date/{date}', [AttendanceController::class, 'show'])->name('date');
 
     Route::get('/logout', [AuthenticatedSessionController::class, 'destroy']);
 });

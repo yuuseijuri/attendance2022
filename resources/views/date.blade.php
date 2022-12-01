@@ -16,8 +16,19 @@
       @endforeach
     </ul>
     @endif
-    <!-- <p><input type="date" class="date"></p> -->
-    <p class="date">{{ $days }}</p>
+    <p class="date">
+      <a href="/date/{{ $days_ye }}"><button type="button">⇦{{ $days_ye }}</button></a>
+      <span>{{ $days }}</span>
+      <a href="/date/{{ $days_to }}"><button type="button">{{ $days_to }}⇨</button></a>
+    </p>
+    {{-- <form action="" method="get">
+    @csrf
+      <p class="date">
+        <span><input type="submit" value="<{{ $days_ye }}"></span>
+      {{ $days }}
+      <span><input type="submit" value="{{ $days_to }}>"></span>
+      </p>
+    </form> --}}
     <hr>
     <table class="date_text">
       <tr>
@@ -27,18 +38,20 @@
         <th class="date_job__time">勤務時間</th>
         <th class="date_job__rest">休憩時間</th>
       </tr>
-      <form action="{{ route('date') }}" method="post">
-        
+      {{-- <form action="{{ route('date') }}" method="post"> --}}
+        @csrf
+        @foreach($attends as $attend)
         <tr>
-          <td>{{ $users->name }}</td>
-          <td>{{ $starts->start_time }}</td>
-          <td>{{ $ends->end_time }}</td>
-          
+          <td>{{ $attend['name'] }}</td>
+          <td>{{ $attend['attendance']->start_time}}</td>
+          <td>{{ $attend['attendance']->end_time }}</td>
+          <td>{{ $attend['all_time'] }}</td>
+          <td>{{ $attend['rest_sum_str'] }}</td>
         </tr>
-        
-      </form>
+        @endforeach
+      {{-- </form> --}}
     </table>
-    <p class="link">{{ $pages->links() }}</p>
+    <div class="link">{{ $pages->links() }}</div>
     
   </div>
   <div class="footer">

@@ -4,17 +4,19 @@
 <link rel="stylesheet" href="{{ asset('css/index.css') }}">
   <h1 class="title">勤怠管理システム</h1>
   <ul class="list">
-    <li class="list_date"><a href="/date">日付一覧</a></li>
+    <li class="list_date"><a href="/date/today">日付一覧</a></li>
     <li class="list_logout"><a href="/logout">ログアウト</a></li>
   </ul>
   <div class="main">
-    @if(count($errors) > 0)
-    <ul>
-      @foreach($errors->all() as $error)
-      <li>{{ $error }}</li>
-      @endforeach
-    </ul>
-    @endif
+    <div class="error">
+      @if(count($errors) > 0)
+      <ul>
+        @foreach($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+      </ul>
+      @endif
+    </div>
     <p class="staff">「{{ $users->name }}」さんお疲れ様です！</p>
     <div class="btn_area__job">
       <form action="{{ route('home/jobIn') }}" method="post">
